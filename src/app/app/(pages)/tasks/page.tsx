@@ -1,19 +1,41 @@
 "use client";
 
 import { TodoList } from "@/app/app/components/todolist/todo-list";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const [activeUser, setActiveUser] = useState(null)
+
 
    useEffect(()=>{
       if(status === "unauthenticated"){
         router.push("/login");
       }
     },[session, router, status])
+
+  useEffect(()=>{
+    const getActiveUser = async () =>{
+      try {
+        const response = await axios.post("/api/getActiveUser", {
+          email: session?.user?.email
+        })
+
+        const activeUser = response.data;
+        console.log(activeUser)
+        
+      } catch (error) {
+        
+      }
+      
+    }
+
+    getActiveUser()
+  },[])
     
   return (
     <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
