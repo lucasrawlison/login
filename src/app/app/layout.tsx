@@ -3,7 +3,6 @@ import "./globals.css";
 import { Sidebar } from "@/app/app/components/sidebar/sidebar";
 import { Header } from "@/app/app/components/header/header";
 import { useEffect, useState } from "react";
-import { ThemeProvider } from "@/components/theme-provider";
 
 
 export default function RootLayout({
