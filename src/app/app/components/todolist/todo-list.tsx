@@ -6,6 +6,13 @@ const todos = [
   { id: 3, title: "Preparar apresentação", completed: false },
   { id: 4, title: "Ler capítulo do livro", completed: false },
   { id: 5, title: "Fazer exercícios", completed: true },
+  { id: 6, title: "Fazer exercícios", completed: true },
+  { id: 7, title: "Fazer exercícios", completed: true },
+  { id: 8, title: "Fazer exercícios", completed: true },
+  { id: 9, title: "Fazer exercícios", completed: true },
+  { id: 10, title: "Fazer exercícios", completed: true },
+  { id: 11, title: "Fazer exercícios", completed: true },
+  { id: 12, title: "Fazer exercícios", completed: true },
 ];
 
 export function TodoList() {

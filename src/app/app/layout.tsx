@@ -3,6 +3,7 @@ import "./globals.css";
 import { Sidebar } from "@/app/app/components/sidebar/sidebar";
 import { Header } from "@/app/app/components/header/header";
 import { useEffect, useState } from "react";
+import { ThemeProvider } from "@/components/theme-provider";
 
 
 export default function RootLayout({
@@ -29,6 +30,7 @@ export default function RootLayout({
   }, [])
 
   return (
+
     <div className="flex h-screen bg-gray-100">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} isMobile={isMobile} />
       <div className="flex flex-col flex-1 overflow-hidden">
