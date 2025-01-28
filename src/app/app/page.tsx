@@ -13,10 +13,15 @@ export default function Home() {
     }
 
     if(session){
-      router.push("/app");
+      router.push("/app/dashboard");
     }
-    
   },[session, router])
+  
+  if (status === "loading") {
+    return null // Exibe enquanto a sessão é carregada
+  }
+
+    
   
 
   return null; // Evita renderização até o redirecionamento ser concluído

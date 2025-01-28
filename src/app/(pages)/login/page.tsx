@@ -10,8 +10,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {/* <h1 className="text-xl font-bold">Login</h1> */}
-      {/* Formulário de Login */}
+      
 
       <Card className="w-full max-w-md">
         <CardHeader>
@@ -27,7 +26,7 @@ export default function Login() {
           <div className="mt-4 text-center">
             <span className="text-sm text-gray-500">Or continue with</span>
           </div>
-          <div className="mt-4 text-center">
+          <div className="mt-4 w-full flex justify-center">
             <GithubLogin />
           </div>
         </CardContent>
