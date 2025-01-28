@@ -1,6 +1,5 @@
 "use client"
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
 import { Sidebar } from "@/app/app/components/sidebar/sidebar";
 import { Header } from "@/app/app/components/header/header";
 import { useEffect, useState } from "react";

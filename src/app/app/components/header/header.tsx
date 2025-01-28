@@ -1,6 +1,6 @@
 "use client"
 import { Menu } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { signOut, useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
 
 
 
@@ -20,8 +19,7 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
-  const { data: session, status } = useSession()
-  const router = useRouter()
+  const { data: session } = useSession()
 
   const user = {
     name: session?.user?.name,

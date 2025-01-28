@@ -1,5 +1,5 @@
 "use client"
-import { signOut, useSession } from "next-auth/react"
+import {useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
@@ -16,7 +16,7 @@ export default function Home() {
       router.push("/app");
     }
     
-  },[session, router])
+  },[session, router, status])
   
 
   return null; // Evita renderização até o redirecionamento ser concluído

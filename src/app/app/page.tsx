@@ -1,5 +1,5 @@
 "use client"
-import { signOut, useSession } from "next-auth/react"
+import {useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
@@ -15,7 +15,7 @@ export default function Home() {
     if(session){
       router.push("/app/dashboard");
     }
-  },[session, router])
+  },[session, router, status])
   
   if (status === "loading") {
     return null // Exibe enquanto a sessão é carregada

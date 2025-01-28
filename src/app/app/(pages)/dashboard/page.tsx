@@ -13,7 +13,7 @@ export default function Dashboard() {
       if(status === "unauthenticated"){
         router.push("/login");
       }
-    },[session, router])
+    },[session, router, status])
     
   return (
     <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">

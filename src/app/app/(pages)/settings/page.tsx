@@ -1,6 +1,4 @@
 "use client";
-
-import { TodoList } from "@/app/app/components/todolist/todo-list";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -13,7 +11,7 @@ export default function Dashboard() {
         if(status === "unauthenticated"){
           router.push("/login");
         }
-      },[session, router])
+      },[session, router, status])
   return (
     <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
       <div className="container mx-auto px-6 py-8">
