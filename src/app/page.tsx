@@ -31,7 +31,7 @@ export default function Home() {
             console.error("Failed to handle user data")
           }
         } catch (error) {
-          console.error("Error checking or creating user")
+          console.error("Error checking or creating user", error)
         }
       }
     }
