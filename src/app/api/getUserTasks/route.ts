@@ -6,8 +6,9 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    console.log(body)
     const { userId } = body;
-
+    console.log(userId)
     if (!userId) {
       return NextResponse.json(
         { message: "User ID is required" },
@@ -21,18 +22,26 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (tasks) {
+    if (!tasks) {
       return NextResponse.json(
-        { exists: true, message: "All tasks", tasks: tasks },
+        { message: "No tasks", tasks: tasks },
+        { status: 200 }
+      );
+    }
+
+    if (tasks) {
+      console.log(tasks.length)
+      return NextResponse.json(
+        { message: "All tasks", tasks: tasks },
         { status: 200 }
       );
     }
     
   } catch (error) {
-    console.error("Error finding user tasks", error);
+    // console.error("Error finding user tasks", error);
     return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
+      { message: "Internal server error", tasks: [] },
+      { status: 200 }
     );
   }
 }
