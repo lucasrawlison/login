@@ -1,6 +1,5 @@
-import { Home, CheckSquare, Settings, X } from "lucide-react"
+import { Home, CheckSquare, Settings } from "lucide-react"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 
 interface SidebarProps {
@@ -45,9 +44,6 @@ export function Sidebar({ open, onClose, isMobile }: SidebarProps) {
         <SheetContent side="left" className="w-[240px] sm:w-[300px] p-0">
           <div className="flex justify-between items-center p-4 border-b">
             <h2 className="text-lg font-semibold">Todo App</h2>
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="h-6 w-6" />
-            </Button>
           </div>
           {sidebarContent}
         </SheetContent>

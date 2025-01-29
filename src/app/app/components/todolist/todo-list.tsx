@@ -1,33 +1,79 @@
+"use client";
+import axios from "axios";
 import { CheckSquare, Square } from "lucide-react";
-
-const todos = [
-  { id: 1, title: "Completar o projeto React", completed: false },
-  { id: 2, title: "Fazer compras no supermercado", completed: true },
-  { id: 3, title: "Preparar apresentação", completed: false },
-  { id: 4, title: "Ler capítulo do livro", completed: false },
-  { id: 5, title: "Fazer exercícios", completed: true },
-  { id: 6, title: "Fazer exercícios", completed: true },
-  { id: 7, title: "Fazer exercícios", completed: true },
-  { id: 8, title: "Fazer exercícios", completed: true },
-  { id: 9, title: "Fazer exercícios", completed: true },
-  { id: 10, title: "Fazer exercícios", completed: true },
-  { id: 11, title: "Fazer exercícios", completed: true },
-  { id: 12, title: "Fazer exercícios", completed: true },
-];
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 export function TodoList() {
+  
+  interface User {
+    id: string
+    name: string
+    email: string
+  }
+  
+  interface Task {
+    id: string
+    title: string
+    completed: boolean
+  }
+  
+  const { data: session, status } = useSession()
+  const [activeUser, setActiveUser] = useState<User | null>(null)
+  const [userTasks, setUserTasks] = useState<Task[]>([])
+
+  useEffect(() => {
+    const handleGetUserTasks = async () => {
+      if (activeUser?.id && status === "authenticated") {
+        try {
+          const response = await axios.post("/api/getUserTasks", {
+            userId: activeUser.id,
+          });
+          const tasks = response.data.tasks;
+          console.log("Tarefas do usuário:", tasks);
+          setUserTasks(tasks);
+        } catch (error) {
+          console.error("Erro ao buscar tarefas:", error);
+        }
+      } else {
+        console.log("ActiveUser ainda não disponível.");
+      }
+    };
+  
+    handleGetUserTasks();
+  }, [activeUser, status]); 
+  
+  useEffect(() => {
+    const getActiveUser = async () => {
+      try {
+        const response = await axios.post("/api/getActiveUser", {
+          email: session?.user?.email
+        })
+  
+        const activeUser = response.data.user;
+        console.log(response.data)
+        setActiveUser(activeUser);
+        
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  
+    getActiveUser()
+  }, [session])
+
   return (
     <div className="mt-8">
       <h3 className="text-xl font-semibold mb-4">Minhas Tarefas</h3>
       <ul className="bg-white shadow overflow-hidden sm:rounded-md">
-        {todos.map((todo) => (
+        {userTasks.map((task) => (
           <li
-            key={todo.id}
-            className="border-b border-gray-200 last:border-b-0"
+            key={task.id}
+            className="border-b border-gray-200 last:border-b-0 hover:cursor-pointer hover:bg-slate-100 transition-all"
           >
             <div className="px-4 py-4 sm:px-6 flex items-center">
               <div className="min-w-0 flex-1 flex items-center">
-                {todo.completed ? (
+                {task.completed ? (
                   <CheckSquare className="h-5 w-5 text-green-500" />
                 ) : (
                   <Square className="h-5 w-5 text-gray-400" />
@@ -35,10 +81,10 @@ export function TodoList() {
                 <div className="ml-4">
                   <p
                     className={`text-sm font-medium text-gray-900 ${
-                      todo.completed ? "line-through" : ""
+                      task.completed ? "line-through" : ""
                     }`}
                   >
-                    {todo.title}
+                    {task.title}
                   </p>
                 </div>
               </div>

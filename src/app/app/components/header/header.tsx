@@ -56,9 +56,9 @@ export function Header({ onMenuClick }: HeaderProps) {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Perfil</DropdownMenuItem>
-                <DropdownMenuItem>Configurações</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => signOut()}>Sign Out</DropdownMenuItem>
+                <DropdownMenuItem className="hover:cursor-pointer">Perfil</DropdownMenuItem>
+                <DropdownMenuItem className="hover:cursor-pointer">Configurações</DropdownMenuItem>
+                <DropdownMenuItem className="hover:cursor-pointer" onClick={() => signOut()}>Sign Out</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

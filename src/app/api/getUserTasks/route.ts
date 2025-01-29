@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
     if (tasks) {
       return NextResponse.json(
-        { exists: true, message: "All tasks", user: tasks },
+        { exists: true, message: "All tasks", tasks: tasks },
         { status: 200 }
       );
     }
