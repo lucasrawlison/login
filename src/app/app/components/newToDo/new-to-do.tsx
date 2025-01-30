@@ -9,10 +9,10 @@ interface NewToDoListProps {
   setIsModalOpen: (value: boolean) => void;
 }
 
-export default function NewToDo({ isModalOpen, setIsModalOpen }: NewToDoListProps) {
+export function NewToDo({ isModalOpen, setIsModalOpen }: NewToDoListProps) {
   return (
     <Dialog onOpenChange={() => setIsModalOpen(!isModalOpen)} open={isModalOpen}>
-      <DialogTrigger onClick={() => setIsModalOpen(!isModalOpen)} className="flex items-center space-x-2 bg-black text-white px-4 py-2 rounded-md gap-1">
+      <DialogTrigger  className="flex items-center space-x-2 bg-black text-white px-4 py-2 rounded-md gap-1">
         <BookmarkPlus />
         Nova Tarefa
       </DialogTrigger>

@@ -38,9 +38,9 @@ export async function POST(req: NextRequest) {
     }
     
   } catch (error) {
-    // console.error("Error finding user tasks", error);
+    console.error("Error finding user tasks", error);
     return NextResponse.json(
-      { message: "Internal server error", tasks: [] },
+      { message: "Internal server error", tasks: [] }, 
       { status: 200 }
     );
   }

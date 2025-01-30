@@ -4,8 +4,7 @@ import { TodoList } from "@/app/app/components/todolist/todo-list";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-import NewToDo from "../../components/newToDo/page";
+import { NewToDo} from "@/app/app/components/newToDo/new-to-do";
 import axios from "axios";
 
 export default function Dashboard() {
