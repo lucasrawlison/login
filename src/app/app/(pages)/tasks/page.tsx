@@ -28,6 +28,8 @@ export default function Dashboard() {
   const [userTasks, setUserTasks] = useState<Task[]>([])
   const [isFetching, setIsFetching] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [loadedTask, setLoadedTask] = useState<Task | null>(null);
+
 
   useEffect(() => {
     const handleGetUserTasks = async () => {
@@ -88,6 +90,7 @@ export default function Dashboard() {
           <NewToDo 
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
+          loadedTask={loadedTask}
           />
         </div>
         <TodoList 
