@@ -7,36 +7,32 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     console.log(body)
-    const { userId } = body;
-    console.log(userId)
-    if (!userId) {
+    const { title, taskId, completed } = body;
+    if (!taskId || !title) {
       return NextResponse.json(
-        { message: "User ID is required" },
+        { message: "User ID, task ID or Title Invalid" },
         { status: 400 }
       );
     }
 
-    const tasks = await prisma.tasks.findMany({
-      where: {
-        userId,
-      },
-      orderBy: { id: "desc" },
+    const updateTask = await prisma.tasks.update({
+       where:{id : taskId},
+        data: {
+            title,
+            completed
+        },
     });
 
-    if (!tasks) {
+    console.log(updateTask)
+
+    if (updateTask) {
       return NextResponse.json(
-        { message: "No tasks", tasks: tasks },
+        { message: "Task updated" },
         { status: 200 }
       );
     }
 
-    if (tasks) {
-      console.log(tasks.length)
-      return NextResponse.json(
-        { message: "All tasks", tasks: tasks },
-        { status: 200 }
-      );
-    }
+    
     
   } catch (error) {
     console.error("Error finding user tasks", error);

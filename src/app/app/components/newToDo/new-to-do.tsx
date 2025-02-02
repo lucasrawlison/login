@@ -46,7 +46,7 @@ export function NewToDo({
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
-    if (!title.trim()) {
+    if (!title.trim()  && !loadedTask?.title.trim()) {
       alert("O título não pode estar vazio.");
       return;
     }
@@ -54,7 +54,21 @@ export function NewToDo({
     console.log(loadedTask ? "Editando tarefa" : "Criando nova tarefa", title);
 
     if(loadedTask) {
-      // Editar tarefa
+      try {
+        setIsSaving(true);
+
+        const response = await axios.post("/api/updateTask", {
+          title: loadedTask.title,
+          taskId: loadedTask.id,
+          completed: loadedTask.completed,
+        })
+
+        console.log(response.data);
+        setIsSaving(false);
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error("Erro ao atualizar tarefa:", error);
+      }
     } else {
       try {
         setIsSaving(true);
@@ -108,7 +122,7 @@ export function NewToDo({
                 <Input
                   id="name"
                   value={loadedTask?.title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => setLoadedTask({ ...loadedTask, title: e.target.value })}
                   className="col-span-3 border-black"
                 />
               ) : (
