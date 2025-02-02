@@ -7,17 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Tasks {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  completed Boolean
+  title     String
+  userId    String  @db.ObjectId
+}
+
 model User {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   email String @unique
   name  String
-  tasks Tasks[]
 }
-model Tasks {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  title    String
-  completed Boolean?
-  userId   String  @db.ObjectId
-  user     User?   @relation(fields: [userId], references: [id])
-}
-

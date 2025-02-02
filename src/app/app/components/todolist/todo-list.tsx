@@ -1,5 +1,6 @@
 "use client";
-import { CheckSquare, Square, LoaderCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CheckSquare, Square, LoaderCircle, Trash2 } from "lucide-react";
 
 
 interface Task {
@@ -11,9 +12,12 @@ interface Task {
 interface TodoListProps {
   isFetching: boolean;
   userTasks: Task[];
+  setLoadedTask: (value: Task | null) => void;
 }
 
-export function TodoList({ isFetching, userTasks }: TodoListProps) {
+
+
+export function TodoList({ isFetching, userTasks, setLoadedTask }: TodoListProps) {
   return (
     <div className="mt-8">
       <h3 className="text-xl font-semibold mb-4">Minhas Tarefas</h3>
@@ -26,6 +30,7 @@ export function TodoList({ isFetching, userTasks }: TodoListProps) {
         <ul className="bg-white shadow overflow-hidden sm:rounded-md">
           {userTasks.map((task) => (
             <li
+              onClick={() => setLoadedTask(task)}
               key={task.id}
               className="border-b border-gray-200 last:border-b-0 hover:cursor-pointer hover:bg-slate-100 transition-all"
             >
@@ -46,6 +51,7 @@ export function TodoList({ isFetching, userTasks }: TodoListProps) {
                     </p>
                   </div>
                 </div>
+              <Trash2 className="w-4 text-red-600"/>
               </div>
             </li>
           ))}

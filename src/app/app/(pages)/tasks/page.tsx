@@ -33,7 +33,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const handleGetUserTasks = async () => {
-      if (activeUser?.id && status === "authenticated") {
+      if (activeUser?.id && status === "authenticated" && isModalOpen === false) {
         try {
           setIsFetching(true)
           const response = await axios.post("/api/getUserTasks", {
@@ -81,6 +81,12 @@ export default function Dashboard() {
     },[session, router, status])
 
 
+    useEffect(() => {
+      if(loadedTask){
+        setIsModalOpen(true);
+      }
+    }, [loadedTask]);
+
   return (
     <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
       <div className="container mx-auto px-6 py-8">
@@ -91,11 +97,15 @@ export default function Dashboard() {
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           loadedTask={loadedTask}
+          setLoadedTask={setLoadedTask}
+          activeUser={activeUser}
+
           />
         </div>
         <TodoList 
         isFetching={isFetching} 
         userTasks={userTasks}
+        setLoadedTask={setLoadedTask}
         />
       </div>
     </main>

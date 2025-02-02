@@ -1,9 +1,19 @@
 import { useState } from "react";
 import { BookmarkPlus } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { LoaderCircle} from "lucide-react";
 
 interface Task {
   id: string;
@@ -11,59 +21,123 @@ interface Task {
   completed: boolean;
 }
 
+interface User {
+  id: string
+  name: string
+  email: string
+}
+
 interface NewToDoListProps {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
   loadedTask: Task | null;
+  setLoadedTask: (value: Task | null) => void;
+  activeUser: User | null;
 }
 
-export function NewToDo({ isModalOpen, setIsModalOpen, loadedTask }: NewToDoListProps) {
+export function NewToDo({
+  isModalOpen,
+  setIsModalOpen,
+  loadedTask,
+  setLoadedTask,
+  activeUser,
+}: NewToDoListProps) {
   const [title, setTitle] = useState(loadedTask?.title || "");
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!title.trim()) {
       alert("O título não pode estar vazio.");
       return;
     }
 
     console.log(loadedTask ? "Editando tarefa" : "Criando nova tarefa", title);
-    setIsModalOpen(false);
+
+    if(loadedTask) {
+      // Editar tarefa
+    } else {
+      try {
+        setIsSaving(true);
+        const response = await axios.post("/api/createTask", {
+          title,
+          userId: activeUser?.id,
+        })
+
+        console.log(response.data);
+        setIsSaving(false);
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error("Erro ao criar nova tarefa:", error);
+        
+      }
+    }
+  };
+
+
+  const handleNewTask = () => {
+    setLoadedTask(null);
+    setIsModalOpen(true);
   };
 
   return (
     <>
       <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
-        <DialogTrigger asChild>
+        <DialogTrigger onClick={handleNewTask} asChild>
           <Button className="flex items-center space-x-2 bg-black text-white px-4 py-2 rounded-md gap-1">
             <BookmarkPlus />
-            {loadedTask ? "Editar Tarefa" : "Nova Tarefa"}
+            Nova Tarefa
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[400px]">
           <DialogHeader>
-            <DialogTitle>{loadedTask ? "Editar Tarefa" : "Nova Tarefa"}</DialogTitle>
+            <DialogTitle>
+              {loadedTask ? "Editar Tarefa" : "Nova Tarefa"}
+            </DialogTitle>
             <DialogDescription>
-              {loadedTask ? "Edite os detalhes da tarefa abaixo." : "Preencha os detalhes abaixo para adicionar uma nova tarefa."}
+              {loadedTask
+                ? "Edite os detalhes da tarefa abaixo."
+                : "Preencha os detalhes abaixo para adicionar uma nova tarefa."}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-1 items-center gap-4">
-              <Label htmlFor="name" className="text-left">Título:</Label>
-              <Input
-                id="name"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="col-span-3 border-black"
-              />
+              <Label htmlFor="name" className="text-left">
+                Título:
+              </Label>
+              {loadedTask ? (
+                <Input
+                  id="name"
+                  value={loadedTask?.title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="col-span-3 border-black"
+                />
+              ) : (
+                <Input
+                  id="name"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="col-span-3 border-black"
+                />
+              )}
             </div>
           </div>
           <DialogFooter className="gap-4">
-            <Button onClick={() => setIsModalOpen(false)} variant="secondary">
-              Cancelar
-            </Button>
-            <Button onClick={handleSave}>
-              {loadedTask ? "Atualizar" : "Salvar"}
-            </Button>
+            {loadedTask ? (
+              <>
+            <Button variant={"destructive"}>Deletar</Button>
+            <Button onClick={handleSave}>Atualizar</Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={() => setIsModalOpen(false)}
+                  variant="secondary"
+                >
+                  Cancelar
+                </Button>
+                <Button onClick={handleSave}>{isSaving? (<LoaderCircle className=" animate-spin"/>) : "Salvar"}</Button>
+              </>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
