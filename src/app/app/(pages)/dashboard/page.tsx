@@ -6,6 +6,7 @@ import { RecentTasks } from "@/app/app/components/recentTasks/recent-tasks"
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
 
@@ -23,11 +24,19 @@ export default function DashboardPage() {
   
 
    const { data: session, status } = useSession()
+     const router = useRouter()
+   
   
     const [activeUser, setActiveUser] = useState<User | null>(null)
     const [userTasks, setUserTasks] = useState<Task[]>([])
     const [isFetching, setIsFetching] = useState(true)
     const [isModalOpen] = useState(false)
+
+    useEffect(() => {
+      if (status === "unauthenticated") {
+        router.push("/login");
+      }
+    }, [session, router, status]);
 
   useEffect(() => {
     const handleGetUserTasks = async () => {
