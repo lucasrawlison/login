@@ -28,12 +28,12 @@ export default function Dashboard() {
   const [userTasks, setUserTasks] = useState<Task[]>([])
   const [isFetching, setIsFetching] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [loadedTask, setLoadedTask] = useState<Task | null>(null);
-
 
   useEffect(() => {
     const handleGetUserTasks = async () => {
-      if (activeUser?.id && status === "authenticated" && isModalOpen === false) {
+      if (activeUser?.id && status === "authenticated" && isModalOpen === false && isDeleteModalOpen === false) {
         try {
           setIsFetching(true)
           const response = await axios.post("/api/getUserTasks", {
@@ -52,7 +52,7 @@ export default function Dashboard() {
     };
   
     handleGetUserTasks();
-  }, [activeUser, status, isModalOpen]); 
+  }, [activeUser, status, isModalOpen, isDeleteModalOpen]); 
   
   useEffect(() => {
     const getActiveUser = async () => {
@@ -106,6 +106,8 @@ export default function Dashboard() {
         isFetching={isFetching} 
         userTasks={userTasks}
         setLoadedTask={setLoadedTask}
+        setIsDeleteModalOpen={setIsDeleteModalOpen}
+        isDeleteModalOpen={isDeleteModalOpen}
         />
       </div>
     </main>

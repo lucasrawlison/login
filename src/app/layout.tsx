@@ -4,7 +4,7 @@ import { SessionProvider } from "next-auth/react";
 
 
 export const metadata: Metadata = {
-  title: "Login page",
+  title: "Todo App",
 };
 
 export default function RootLayout({
