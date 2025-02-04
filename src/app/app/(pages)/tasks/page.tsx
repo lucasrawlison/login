@@ -33,11 +33,12 @@ export default function Dashboard() {
 
   useEffect(() => {
     const handleGetUserTasks = async () => {
+      
       if (activeUser?.id && status === "authenticated" && isModalOpen === false && isDeleteModalOpen === false) {
         try {
           setIsFetching(true)
           const response = await axios.post("/api/getUserTasks", {
-            userId: activeUser.id,
+            activeUser
           });
           const tasks = response.data.tasks;
           console.log("Tarefas do usuário:", tasks);

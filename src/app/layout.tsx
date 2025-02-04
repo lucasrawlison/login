@@ -7,12 +7,15 @@ export const metadata: Metadata = {
   title: "Todo App",
 };
 
+
 export default function RootLayout({
+  
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
+
     <SessionProvider>
       <html lang="en">
         <body>

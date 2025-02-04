@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
       where: {
         email,
       },
+      include:{configs:true}
     });
 
     if (existingUser) {

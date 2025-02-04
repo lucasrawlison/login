@@ -12,17 +12,18 @@ export default function Home() {
       router.push("/login");
     }
 
-    if(session){
-      router.push("/app/dashboard");
-    }
   },[session, router, status])
   
-  if (status === "loading") {
-    return null // Exibe enquanto a sessão é carregada
-  }
-
+  if(session){
     
+    router.push("/app/dashboard");
+  }
   
+  
+  if(!session){
+    
+    router.push("/login");
+  }
 
   return null; // Evita renderização até o redirecionamento ser concluído
 

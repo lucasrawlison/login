@@ -6,35 +6,36 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email } = body;
-
-    if (!email) {
+    console.log(body)
+    const { id } = body.user;
+    if (!id) {
       return NextResponse.json(
-        { message: "User email is required" },
+        { message: "User ID Invalid" },
         { status: 400 }
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-      include: {
-        configs: true,
-      },
+    const userConfigs = await prisma.userConfigs.create({
+        data: {
+            userId:id,
+        },
     });
 
-    if (user) {
+    console.log(userConfigs)
+
+    if (userConfigs) {
       return NextResponse.json(
-        { exists: true, message: "User finded", user: user },
+        { message: "New user configs inserted" },
         { status: 200 }
       );
     }
+
+    
     
   } catch (error) {
-    console.error("Error finding user tasks", error);
+    console.error("Error creating configs", error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { message: "Internal server error"}, 
       { status: 500 }
     );
   }

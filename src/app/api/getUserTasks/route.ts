@@ -4,12 +4,13 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
+  
   try {
     const body = await req.json();
     console.log(body)
-    const { userId } = body;
-    console.log(userId)
-    if (!userId) {
+    const { activeUser } = body;
+    console.log(activeUser.configs)
+    if (!activeUser) {
       return NextResponse.json(
         { message: "User ID is required" },
         { status: 400 }
@@ -18,9 +19,9 @@ export async function POST(req: NextRequest) {
 
     const tasks = await prisma.tasks.findMany({
       where: {
-        userId,
+        userId:activeUser.id,
       },
-      orderBy: { id: "desc" },
+      orderBy: { id: activeUser.configs.taskOrder },
     });
 
     if (!tasks) {
