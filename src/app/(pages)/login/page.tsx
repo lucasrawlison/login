@@ -31,7 +31,7 @@ export default function Login() {
             <Suspense fallback={<div>Loading...</div>}>
               <GithubLogin />
             </Suspense>
-          </div>
+          </div> 
         </CardContent>
       </Card>
     </div>
