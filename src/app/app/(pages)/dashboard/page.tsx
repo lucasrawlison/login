@@ -44,7 +44,7 @@ export default function DashboardPage() {
         try {
           setIsFetching(true)
           const response = await axios.post<{tasks: Task[]}>("/api/getUserTasks", {
-            userId: activeUser.id,
+            activeUser,
           });
           const tasks = response.data.tasks;
           console.log("Tarefas do usuário:", tasks);
