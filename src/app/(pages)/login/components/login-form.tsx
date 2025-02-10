@@ -4,15 +4,22 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { signIn } from "next-auth/react"
 
 export default function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle login logic here
     console.log("Login attempt with:", email, password)
+    const response = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    console.log(response)
   }
 
   return (
