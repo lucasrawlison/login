@@ -2,31 +2,12 @@ import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 import Credentials from "next-auth/providers/credentials"
 import type { Provider } from "next-auth/providers"
-import axios from "axios"
- 
-interface User {
-  email: string,
-  password: string
-}
-const providers: Provider[] = [
-  Credentials({
-    credentials: {
-      email: { label: "Email", type: "email" },
-      password: { label: "Password", type: "password" },
-    },
-    async authorize(credentials) {
-      console.log(credentials)
-      const user : User = await axios.post("/api/verifyUser", {credentials})
-      console.log(user)
-      
+import { PrismaClient } from "@prisma/client";
 
-      if(credentials.email === user.email && credentials.password === user.password) {
-        return user 
-      }else{
-        throw new Error("invalid credentials")
-      }
-    },
-  }), 
+
+const prisma = new PrismaClient();
+
+const providers: Provider[] = [
   GitHub,
 ];
 
@@ -47,7 +28,38 @@ export const providerMap = providers
 
 
   export const { handlers, signIn, signOut, auth } = NextAuth({
-    providers: [GitHub, Credentials],
+    providers: [GitHub, Credentials({
+      credentials:{
+        email:{label:"Email", placeholder:"youremail@email.com", type: "email"},
+        password: {label: "Password", type: "password" }
+      },
+      authorize: async (credentials) => {
+        if(!credentials.email || !credentials.password){
+          return null
+        }
+
+        if (typeof credentials.email !== 'string') {
+          throw new Error("O email deve ser uma string");
+        }
+
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        });
+
+        if(!user){
+          throw new Error("Usuário não encontrado")
+        }
+        
+        if(user.password !== credentials.password){
+          throw new Error("Senha incorreta")
+        }
+
+        return { id: "1", email: user.email };
+
+      }
+
+
+    })],
     pages: {
       signIn: "/login",
     },

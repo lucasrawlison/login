@@ -16,10 +16,21 @@ export default function LoginForm() {
     const response = await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      redirect:false
     });
 
-    console.log(response)
+    if (response?.error) {
+      // Se a resposta contiver erro, exibe a mensagem de erro
+      console.log(response); // Aqui você pode tratar ou mostrar o erro ao usuário
+      alert(response.error); // Exemplo: Alerta para o usuário
+    } else if (response?.ok) {
+      // Caso o login seja bem-sucedido
+      console.log("Login bem-sucedido!");
+    } else {
+      // Se não for possível identificar o erro, exibe uma mensagem padrão
+      console.log("Erro desconhecido, tente novamente.");
+    }
+
   }
 
   return (
