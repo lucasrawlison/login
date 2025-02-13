@@ -6,8 +6,8 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, name } = body;
-
+    const { email, name, imgLink } = body;
+    console.log(body)
     if (!email) {
       return NextResponse.json(
         { message: "Email is required" },
@@ -35,7 +35,8 @@ export async function POST(req: NextRequest) {
       data: {
         email,
         name: name || null, // Define o nome como opcional
-        active: true
+        active: true,
+        imgLink
       },
     });
 

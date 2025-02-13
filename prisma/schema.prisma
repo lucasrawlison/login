@@ -20,6 +20,7 @@ model User {
   email String @unique
   password String?
   name  String
+  imgLink String?
   tasks Tasks[]
   configs UserConfigs?
   active Boolean @default(false)
