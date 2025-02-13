@@ -18,10 +18,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          return null
           throw new Error("Email e senha são obrigatórios.");
         }
 
         if (typeof credentials.email !== "string") {
+          return null
           throw new Error("string.");
         }
 
@@ -30,6 +32,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         });
 
         if (!user) {
+          return null
           throw new Error("Usuário não encontrado.");
         }
 
@@ -40,6 +43,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // }
 
         if(credentials.password !== user.password){
+          return null
           throw new Error("Senha incorreta")
         }
 
@@ -49,6 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: "/login", // Página customizada de login
+    error: "/login"
   },
   callbacks: {
     async signIn({ user }) {

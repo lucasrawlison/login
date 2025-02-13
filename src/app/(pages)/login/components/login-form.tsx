@@ -1,28 +1,53 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { signIn } from "next-auth/react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [errorMsg] = useState("")
-  // const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Login attempt with:", email, password)
+    e.preventDefault();
+    setLoginError(null); // Limpa erros anteriores
+
     const response = await signIn("credentials", {
       email,
       password,
+      redirect: false, // Evita redirecionamento automático
     });
 
-    console.log(response)
+    if(response?.ok){
 
-  }
+      console.log("Login bem-sucedido:", response);
+      // Redirecionar manualmente após o login, se necessário
+      router.push("/app/dashboard");
+    }else{
+
+      if (response?.error) {
+        setLoginError(response.error);
+      }
+    }
+
+  };
+
+  const getErrorMessage = (errorCode: string | null) => {
+    if (!errorCode) return null;
+    switch (errorCode) {
+      case "CredentialsSignin":
+        return "E-mail ou senha incorretos.";
+      case "OAuthAccountNotLinked":
+        return "Essa conta já está associada a outro método de login.";
+      default:
+        return "Ocorreu um erro ao tentar fazer login.";
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -38,7 +63,7 @@ export default function LoginForm() {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">Senha</Label>
         <Input
           id="password"
           type="password"
@@ -47,17 +72,16 @@ export default function LoginForm() {
           required
         />
       </div>
-      {errorMsg ? (
-        <div className="w-full flex justify-center">
-          <p className=" text-red-600">{errorMsg}</p>
-        </div>
-      ) : (
-        ""
+
+      {loginError && (
+        <p className="w-full text-center text-red-500">
+          {getErrorMessage(loginError)}
+        </p>
       )}
+
       <Button type="submit" className="w-full">
-        Log in
+        Entrar
       </Button>
     </form>
   );
 }
-
